@@ -9,3 +9,6 @@ node_modules/
 
 # Mac system file (not needed in the repo)
 .DS_Store
+
+# Instructor-only lab text and answer keys (keep local; not for student clones)
+INSTRUCTOR.md
