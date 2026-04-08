@@ -4,7 +4,7 @@
  * How to run:
  *   1. npm install
  *   2. npm start
- *   3. Open http://localhost:3000/health in the browser
+ *   3. Open http://localhost:3000/ in the browser
  */
 
 // Express = library to handle HTTP requests (browser or API calls).
@@ -29,10 +29,55 @@ app.use((req, res, next) => {
   next(); // continue to the matching route below
 });
 
+// ----- / -----
+// Normal web page in the browser (not raw JSON).
+app.get('/', (req, res) => {
+  logger.info('home page requested');
+  res.type('html').send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tutorial app</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 36rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+    h1 { font-size: 1.35rem; }
+    ul { padding-left: 1.2rem; }
+    a { color: #0b57d0; }
+    .note { color: #444; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <h1>Monitoring, logging &amp; errors — tutorial</h1>
+  <p>This server is running. Use the links below for class exercises.</p>
+  <ul>
+    <li><a href="/health">Health check</a> — should work</li>
+    <li><a href="/work">Work</a> — add logging (TODO in code)</li>
+    <li><a href="/risky-work">Risky work</a> — broken until you add try/catch</li>
+    <li><a href="/stats">Stats</a> — simple counters (JSON)</li>
+  </ul>
+  <p class="note">Programmers and tools can still call <code>/health</code> without a browser to get JSON.</p>
+</body>
+</html>`);
+});
+
 // ----- /health -----
-// Example route: always works, logs one INFO line, returns JSON "ok".
+// Browsers get a simple page; scripts and curl still get JSON (easier for class demos).
 app.get('/health', (req, res) => {
   logger.info('health check requested');
+  if (req.accepts('html')) {
+    res.type('html').send(`<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>OK</title>
+<style>body{font-family:system-ui,sans-serif;margin:2rem}</style>
+</head>
+<body>
+  <p><strong>All good.</strong> The tutorial API is running.</p>
+  <p><a href="/">Back to home</a></p>
+</body>
+</html>`);
+    return;
+  }
   res.json({ ok: true, service: 'tutorial-api' });
 });
 
@@ -73,5 +118,5 @@ app.get('/stats', (req, res) => {
 app.listen(PORT, () => {
   logger.info('server started', { port: PORT });
   // Extra line so beginners see the URL even if they skip the README.
-  console.log(`Open http://localhost:${PORT}/health`);
+  console.log(`Open http://localhost:${PORT}/`);
 });
