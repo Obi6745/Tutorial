@@ -1,29 +1,36 @@
 /**
- * Small web app for class: logging, simple counters, and routes to experiment with.
+ * MEAN stack — Express API layer (TypeScript).
+ * MongoDB and Angular are covered elsewhere in the course; this repo is the typed Node/Express server.
  *
  * How to run:
  *   1. npm install
- *   2. npm start
+ *   2. npm start   (compiles TypeScript to dist/, then runs node)
  *   3. Open http://localhost:3000/ in the browser
  */
 
-const express = require('express');
-const logger = require('./logger');
+import express from 'express';
+import type { Request, Response, NextFunction } from 'express';
+import { logger } from './logger';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
-const stats = {
+interface Stats {
+  requests: number;
+  errors: number;
+}
+
+const stats: Stats = {
   requests: 0,
   errors: 0,
 };
 
-app.use((req, res, next) => {
+app.use((_req: Request, _res: Response, next: NextFunction) => {
   stats.requests += 1;
   next();
 });
 
-app.get('/', (req, res) => {
+app.get('/', (_req: Request, res: Response) => {
   logger.info('home page requested');
   res.type('html').send(`<!DOCTYPE html>
 <html lang="en">
@@ -53,7 +60,7 @@ app.get('/', (req, res) => {
 </html>`);
 });
 
-app.get('/health', (req, res) => {
+app.get('/health', (req: Request, res: Response) => {
   logger.info('health check requested');
   if (req.accepts('html')) {
     res.type('html').send(`<!DOCTYPE html>
@@ -71,18 +78,18 @@ app.get('/health', (req, res) => {
   res.json({ ok: true, service: 'tutorial-api' });
 });
 
-app.get('/work', (req, res) => {
+app.get('/work', (_req: Request, res: Response) => {
   const result = { message: 'Task finished', stepsDone: 3 };
 
   res.json(result);
 });
 
-app.get('/risky-work', (req, res) => {
+app.get('/risky-work', (_req: Request, res: Response) => {
   const data = JSON.parse('this is not valid json {{{');
   res.json({ ok: true, data });
 });
 
-app.get('/stats', (req, res) => {
+app.get('/stats', (_req: Request, res: Response) => {
   res.json({ ...stats });
 });
 

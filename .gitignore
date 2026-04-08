@@ -10,5 +10,8 @@ node_modules/
 # Mac system file (not needed in the repo)
 .DS_Store
 
+# Compiled TypeScript (rebuild with npm run build or npm start)
+dist/
+
 # Instructor-only lab text and answer keys (keep local; not for student clones)
 INSTRUCTOR.md
