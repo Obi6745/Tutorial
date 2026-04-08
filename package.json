@@ -1,0 +1,17 @@
+{
+  "name": "tutorial-monitoring-logging-errors",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Class starter (monitoring, logging, errors). Run: npm install, then npm start. Needs Node 18+. Main code: src/server.js.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
